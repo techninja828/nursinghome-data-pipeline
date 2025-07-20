@@ -1,0 +1,25 @@
+datasets:
+  penalties:
+    filename_pattern: "NH_Penalties_*.csv"
+    staging_table: "staging_penalties"
+    natural_key: [cms_certification_number_ccn, penalty_date, penalty_type]
+    columns:
+      cms_certification_number_ccn: {type: string}
+      penalty_date: {type: date}
+      penalty_type: {type: string}
+      fine_amount: {type: numeric}
+      payment_denial_length_in_days: {type: int, nullable: true}
+      state: {type: string}
+      provider_name: {type: string}
+  quality_claims:
+    filename_pattern: "NH_QualityMsr_Claims_*.csv"
+    staging_table: "staging_quality_claims"
+    natural_key: [ccn, measure_code, period_start, period_end]
+    columns:
+      ccn: {type: string}
+      measure_code: {type: string}
+      period_start: {type: date}
+      period_end: {type: date}
+      score_value: {type: numeric, nullable: true}
+      numerator: {type: numeric, nullable: true}
+      denominator: {type: numeric, nullable: true}
