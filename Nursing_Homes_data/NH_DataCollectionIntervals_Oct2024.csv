@@ -1,0 +1,46 @@
+"Measure Code","Measure Description","Data Collection Period From Date","Data Collection Period Through Date","Measure Date Range","Processing Date"
+"004",Rate of potentially preventable hospital readmissions 30 days after discharge from a SNF,10/01/2021,09/30/2023,,20241001
+"005",Rate of successful return to home or community from a SNF,10/01/2021,09/30/2023,,20241001
+"006",Medicare spending per beneficiary (MSPB) for residents in SNFs,10/01/2021,09/30/2023,,20241001
+"007",Percentage of SNF residents whose medications were reviewed and who received follow-up care when medication issues were identified,01/01/2023,12/31/2023,,20241001
+"013",Percentage of SNF residents who experience one or more falls with major injury during their SNF stay,01/01/2023,12/31/2023,,20241001
+"024",Percentage of SNF residents who achieve or exceed a self-care ability expected for their condition at discharge,01/01/2023,12/31/2023,,20241001
+"025",Percentage of SNF residents who achieve or exceed the level of movement expected for their condition at discharge,01/01/2023,12/31/2023,,20241001
+"038",Percentage of residents with pressure ulcers/injuries that are new or worsened,01/01/2023,12/31/2023,,20241001
+"039",Rate of healthcare associated infections acquired during the SNF stay that resulted in hospitalization,10/01/2022,09/30/2023,,20241001
+"040",Percentage of healthcare workers vaccinated for COVID-19,10/01/2023,12/31/2023,,20241001
+"041",Percentage of healthcare personnel who got a flu short for the current season,10/01/2023,03/31/2024,,20241001
+"042",Percentage of SNF residents who are at or above an expected ability to care for themselves and move around at discharge,01/01/2023,12/31/2023,,20241001
+"401",Percentage of long-stay residents whose need for help with daily activities has increased,10/01/2022,09/30/2023,,20241001
+"404",Percentage of long-stay residents who lose too much weight,07/01/2023,06/30/2024,,20241001
+"405",Percentage of low risk long-stay residents who lose control of their bowels or bladder,10/01/2022,09/30/2023,,20241001
+"406",Percentage of long-stay residents with a catheter inserted and left in their bladder,07/01/2023,06/30/2024,,20241001
+"407",Percentage of long-stay residents with a urinary tract infection,07/01/2023,06/30/2024,,20241001
+"408",Percentage of long-stay residents who have depressive symptoms,07/01/2023,06/30/2024,,20241001
+"409",Percentage of long-stay residents who were physically restrained,07/01/2023,06/30/2024,,20241001
+"410",Percentage of long-stay residents experiencing one or more falls with major injury,07/01/2023,06/30/2024,,20241001
+"415",Percentage of long-stay residents assessed and appropriately given the pneumococcal vaccine,07/01/2023,06/30/2024,,20241001
+"419",Percentage of long-stay residents who received an antipsychotic medication,07/01/2023,06/30/2024,,20241001
+"430",Percentage of short-stay residents assessed and appropriately given the pneumococcal vaccine,04/01/2023,06/30/2024,,20241001
+"434",Percentage of short-stay residents who newly received an antipsychotic medication,04/01/2023,06/30/2024,,20241001
+"451",Percentage of long-stay residents whose ability to move independently worsened,10/01/2022,09/30/2023,,20241001
+"452",Percentage of long-stay residents who received an antianxiety or hypnotic medication,07/01/2023,06/30/2024,,20241001
+"453",Percentage of high risk long-stay residents with pressure ulcers,10/01/2022,09/30/2023,,20241001
+"454",Percentage of long-stay residents assessed and appropriately given the seasonal influenza vaccine,07/01/2023,06/30/2024,,20241001
+"471",Percentage of short-stay residents who made improvements in function,07/01/2022,09/30/2023,,20241001
+"472",Percentage of short-stay residents who were assessed and appropriately given the seasonal influenza vaccine,04/01/2023,06/30/2024,,20241001
+"521",Percentage of short-stay residents who were rehospitalized after a nursing home admission,04/01/2023,03/31/2024,,20241001
+"522",Percentage of short-stay residents who had an outpatient emergency department visit,04/01/2023,03/31/2024,,20241001
+"551",Number of hospitalizations per 1000 long-stay resident days,04/01/2023,03/31/2024,,20241001
+"552",Number of outpatient emergency department visits per 1000 long-stay resident days,04/01/2023,03/31/2024,,20241001
+"C_F_CMPL",Most recent 12 month period for deficiencies cited on fire safety inspection complaint surveys,10/01/2023,09/30/2024,,20241001
+"C_H_CMPL",Most recent 12 month period for deficiencies cited on health inspection complaint surveys,10/01/2023,09/30/2024,,20241001
+"C_IC_SRVY",Most recent 12 month period for deficiencies cited on infection control surveys,10/01/2023,09/30/2024,,20241001
+"P1_F_CMPL",First prior 12 month period for deficiencies cited on fire safety inspection complaint surveys,10/01/2022,09/30/2023,,20241001
+"P1_H_CMPL",First prior 12 month period for deficiencies cited on health inspection complaint surveys,10/01/2022,09/30/2023,,20241001
+"P1_IC_SRVY",First prior 12 month period for deficiencies cited on infection control surveys,10/01/2022,09/30/2023,,20241001
+"P2_F_CMPL",Second prior 12 month period for deficiencies cited on fire safety inspection complaint surveys,10/01/2021,09/30/2022,,20241001
+"P2_H_CMPL",Second prior 12 month period for deficiencies cited on health inspection complaint surveys,10/01/2021,09/30/2022,,20241001
+"P2_IC_SRVY",Second prior 12 month period for deficiencies cited on infection control surveys,10/01/2021,09/30/2022,,20241001
+"STAFFING_LEVELS",Reporting Period for Nursing Home Staffing Level Measures,04/01/2024,06/30/2024,,20241001
+"STAFFING_TURNOVER",Reporting Period for Nursing Home Staff Turnover Measures,04/01/2023,03/31/2024,,20241001
