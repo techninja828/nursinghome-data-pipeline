@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+
+# Envs / secrets
+.env
+.venv/
+
+# Data
+csvs/*
+!csvs/.gitkeep
+nh_local.db
+
+# Outputs
+*.log
