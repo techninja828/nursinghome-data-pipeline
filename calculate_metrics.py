@@ -4,6 +4,7 @@ import re
 
 DATA_DIR = Path("Nursing_Homes_data")
 OUTPUT_CSV = "metrics_summary.csv"
+STAFFING_FILE = "NH_StaffingData_Oct2024.csv"
 
 # Columns used for metrics
 REQUIRED_COLS = [
@@ -35,18 +36,17 @@ def normalize_quarter(val: str) -> str:
 
 
 def load_data(data_dir: Path = DATA_DIR) -> pd.DataFrame:
-    frames = []
-    for csv_file in data_dir.glob("*.csv"):
-        try:
-            df = pd.read_csv(csv_file, low_memory=False)
-        except Exception:
-            continue
-        if not set(["MDScensus", "PROVNUM"]).issubset(df.columns):
-            continue
-        frames.append(df)
-    if not frames:
-        raise FileNotFoundError("No valid CSV files found with required columns")
-    return pd.concat(frames, ignore_index=True)
+    """Load the known staffing CSV and validate required columns."""
+    csv_file = data_dir / STAFFING_FILE
+    if not csv_file.is_file():
+        raise FileNotFoundError(f"Required data file not found: {csv_file}")
+
+    df = pd.read_csv(csv_file, low_memory=False)
+    missing = [col for col in REQUIRED_COLS if col not in df.columns]
+    if missing:
+        cols = ", ".join(missing)
+        raise ValueError(f"Missing required columns: {cols}")
+    return df
 
 
 def clean_and_prepare(df: pd.DataFrame) -> pd.DataFrame:
