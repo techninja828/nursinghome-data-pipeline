@@ -12,5 +12,7 @@ python build.py
 sqlite3 nh_local.db "SELECT * FROM v_penalties_by_state LIMIT 5;"
 # load the additional nursing home CSVs into sqlite
 python load_nursing_home_data.py
+# calculate staffing metrics from the sqlite database
+python calculate_metrics.py
 # launch a Streamlit app to explore the data
 streamlit run streamlit_app.py

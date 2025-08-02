@@ -1,8 +1,14 @@
+"""Calculate staffing metrics from a local SQLite database.
+
+Before running this script, execute ``load_nursing_home_data.py`` to
+populate ``nh_local.db`` with nursing home CSV data and completeness metrics.
+"""
+
 import pandas as pd
-from pathlib import Path
+import sqlite3
 import re
 
-DATA_DIR = Path("Nursing_Homes_data")
+DB_PATH = "nh_local.db"
 OUTPUT_CSV = "metrics_summary.csv"
 
 # Columns used for metrics
@@ -34,18 +40,28 @@ def normalize_quarter(val: str) -> str:
     return None
 
 
-def load_data(data_dir: Path = DATA_DIR) -> pd.DataFrame:
+def load_data(db_path: str = DB_PATH) -> pd.DataFrame:
+    conn = sqlite3.connect(db_path)
+    placeholders = ",".join("?" for _ in REQUIRED_COLS)
+    query = f"""
+        SELECT table_name
+        FROM dq_completeness
+        WHERE column_name IN ({placeholders})
+        GROUP BY table_name
+        HAVING COUNT(DISTINCT column_name) = {len(REQUIRED_COLS)}
+    """
+    tables = [row[0] for row in conn.execute(query, REQUIRED_COLS)]
     frames = []
-    for csv_file in data_dir.glob("*.csv"):
+    cols = ", ".join(REQUIRED_COLS)
+    for table in tables:
         try:
-            df = pd.read_csv(csv_file, low_memory=False)
+            df = pd.read_sql(f"SELECT {cols} FROM {table}", conn)
         except Exception:
             continue
-        if not set(["MDScensus", "PROVNUM"]).issubset(df.columns):
-            continue
         frames.append(df)
+    conn.close()
     if not frames:
-        raise FileNotFoundError("No valid CSV files found with required columns")
+        raise FileNotFoundError("No tables with required columns found in database")
     return pd.concat(frames, ignore_index=True)
 
 
@@ -111,7 +127,7 @@ def calculate_metrics(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> None:
-    df = load_data(DATA_DIR)
+    df = load_data(DB_PATH)
     df = clean_and_prepare(df)
     metrics = calculate_metrics(df)
     metrics.to_csv(OUTPUT_CSV, index=False)
