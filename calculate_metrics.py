@@ -1,3 +1,4 @@
+import logging
 import pandas as pd
 from pathlib import Path
 import re
@@ -88,6 +89,15 @@ def clean_and_prepare(df: pd.DataFrame) -> pd.DataFrame:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
 
+    critical_cols = ["MDScensus", "Hrs_RN", "Hrs_LPN", "Hrs_CNA"]
+    zero_mask = (df[critical_cols] == 0).any(axis=1)
+    if zero_mask.any():
+        logging.warning(
+            "Replacing zero values in critical columns with NA for %d rows", zero_mask.sum()
+        )
+        df.loc[zero_mask, critical_cols] = pd.NA
+
+    before_drop = len(df)
     df = df.dropna(subset=[
         "MDScensus",
         "STATE",
@@ -96,6 +106,11 @@ def clean_and_prepare(df: pd.DataFrame) -> pd.DataFrame:
         "Hrs_LPN",
         "Hrs_CNA",
     ])
+    dropped = before_drop - len(df)
+    if dropped:
+        logging.warning(
+            "Dropped %d rows due to zero or missing critical values", dropped
+        )
     return df
 
 
@@ -114,9 +129,28 @@ def calculate_metrics(df: pd.DataFrame) -> pd.DataFrame:
             total_employed=("employed_hours", "sum"),
         )
     )
+    zero_census = grouped["total_census"] == 0
+    zero_employed = grouped["total_employed"] == 0
+    zero_rows = (zero_census | zero_employed).sum()
+    if zero_rows:
+        logging.warning(
+            "Replacing zero denominators with NA for %d rows", zero_rows
+        )
+        grouped.loc[zero_census, "total_census"] = pd.NA
+        grouped.loc[zero_employed, "total_employed"] = pd.NA
 
     grouped["nurse_to_patient_ratio"] = grouped["total_nurse_hours"] / grouped["total_census"]
     grouped["contract_vs_employed_ratio"] = grouped["total_contract"] / grouped["total_employed"]
+
+    before_drop = len(grouped)
+    grouped = grouped.dropna(
+        subset=["nurse_to_patient_ratio", "contract_vs_employed_ratio"]
+    )
+    dropped = before_drop - len(grouped)
+    if dropped:
+        logging.warning(
+            "Dropped %d rows due to zero or missing denominators", dropped
+        )
 
     return grouped[[
         "PROVNUM",
