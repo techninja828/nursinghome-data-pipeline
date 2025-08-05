@@ -1,10 +1,10 @@
 import pandas as pd
 from pathlib import Path
 import re
+from typing import List, Tuple
 
 DATA_DIR = Path("Nursing_Homes_data")
 OUTPUT_CSV = "metrics_summary.csv"
-STAFFING_FILE = "NH_StaffingData_Oct2024.csv"
 
 # Columns used for metrics
 REQUIRED_COLS = [
@@ -35,18 +35,36 @@ def normalize_quarter(val: str) -> str:
     return None
 
 
-def load_data(data_dir: Path = DATA_DIR) -> pd.DataFrame:
-    """Load the known staffing CSV and validate required columns."""
-    csv_file = data_dir / STAFFING_FILE
-    if not csv_file.is_file():
-        raise FileNotFoundError(f"Required data file not found: {csv_file}")
+def load_data(data_dir: Path = DATA_DIR) -> Tuple[pd.DataFrame, List[Tuple[str, str]]]:
+    """Scan CSVs and merge them on PROVNUM/CY_Qtr.
 
-    df = pd.read_csv(csv_file, low_memory=False)
-    missing = [col for col in REQUIRED_COLS if col not in df.columns]
+    Returns a tuple of the merged dataframe and a list of merge pairs that
+    produced empty results.
+    """
+    frames: List[Tuple[str, pd.DataFrame]] = []
+    for csv_file in data_dir.glob("*.csv"):
+        df = pd.read_csv(csv_file, low_memory=False)
+        if {"PROVNUM", "CY_Qtr"}.issubset(df.columns):
+            frames.append((csv_file.name, df))
+
+    if not frames:
+        raise FileNotFoundError(
+            f"No CSV files with PROVNUM and CY_Qtr found in {data_dir}"
+        )
+
+    merged_name, merged = frames[0]
+    empty_merges: List[Tuple[str, str]] = []
+    for name, df in frames[1:]:
+        merged = pd.merge(merged, df, on=["PROVNUM", "CY_Qtr"], how="inner")
+        if merged.empty:
+            empty_merges.append((merged_name, name))
+        merged_name = f"{merged_name}+{name}"
+
+    missing = [col for col in REQUIRED_COLS if col not in merged.columns]
     if missing:
         cols = ", ".join(missing)
-        raise ValueError(f"Missing required columns: {cols}")
-    return df
+        raise ValueError(f"Missing required columns after merge: {cols}")
+    return merged, empty_merges
 
 
 def clean_and_prepare(df: pd.DataFrame) -> pd.DataFrame:
@@ -111,7 +129,10 @@ def calculate_metrics(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> None:
-    df = load_data(DATA_DIR)
+    df, empty_merges = load_data(DATA_DIR)
+    if empty_merges:
+        for left, right in empty_merges:
+            print(f"WARNING: merge between {left} and {right} produced no rows")
     df = clean_and_prepare(df)
     metrics = calculate_metrics(df)
     metrics.to_csv(OUTPUT_CSV, index=False)
